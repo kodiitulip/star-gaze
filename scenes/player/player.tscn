@@ -1,16 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://b32xuoack8h78"]
+[gd_scene load_steps=10 format=3 uid="uid://b32xuoack8h78"]
 
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_dgpe7"]
 [ext_resource type="Texture2D" uid="uid://ce0mwjft5qdmb" path="res://icon.svg" id="1_p0pfc"]
 [ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_cddjq"]
 [ext_resource type="Script" path="res://scripts/state_machine/states/state_character_player_move.gd" id="3_q54jw"]
 [ext_resource type="Script" path="res://scripts/components/input_component.gd" id="4_7lwq0"]
 [ext_resource type="Script" path="res://scripts/components/status_component.gd" id="5_heomh"]
 [ext_resource type="Script" path="res://scripts/components/hurt_box_component.gd" id="6_1fecr"]
+[ext_resource type="PackedScene" uid="uid://b6nd5ha7coyqb" path="res://scenes/weapons/laser_shooter/laser_shooter.tscn" id="7_lkdpd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pfrue"]
 size = Vector2(32, 32)
 
 [node name="Player" type="Node2D"]
+script = ExtResource("1_dgpe7")
 
 [node name="Icon" type="Sprite2D" parent="."]
 scale = Vector2(0.25, 0.25)
@@ -32,9 +35,22 @@ script = ExtResource("4_7lwq0")
 [node name="StatusComponent" type="Node" parent="."]
 script = ExtResource("5_heomh")
 health = 10
+defense = 1
 
-[node name="HurtBoxComponent" type="Area2D" parent="."]
+[node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("status_component")]
+collision_mask = 0
+monitoring = false
 script = ExtResource("6_1fecr")
+status_component = NodePath("../StatusComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 shape = SubResource("RectangleShape2D_pfrue")
+
+[node name="Weapons" type="Node2D" parent="."]
+position = Vector2(0, -16)
+
+[node name="LaserShooter" parent="Weapons" instance=ExtResource("7_lkdpd")]
+position = Vector2(-12, 0)
+
+[node name="LaserShooter2" parent="Weapons" instance=ExtResource("7_lkdpd")]
+position = Vector2(12, 0)

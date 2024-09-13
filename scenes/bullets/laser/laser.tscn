@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://duu8lf2ev4nmy"]
+
+[ext_resource type="Texture2D" uid="uid://ce0mwjft5qdmb" path="res://icon.svg" id="1_gn61s"]
+[ext_resource type="Script" path="res://scenes/bullets/laser/laser.gd" id="1_iouqp"]
+[ext_resource type="Script" path="res://scripts/components/hit_box_component.gd" id="2_ygoip"]
+[ext_resource type="Script" path="res://scripts/resources/attack_resource.gd" id="3_ac2ju"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="5_oqsdi"]
+[ext_resource type="Script" path="res://scripts/state_machine/states/state_character_move.gd" id="6_uduxy"]
+
+[sub_resource type="Resource" id="Resource_5aqxk"]
+script = ExtResource("3_ac2ju")
+damage = 3.0
+critical_chance = 0.2
+critical_multiplier = 0.2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5q8vg"]
+size = Vector2(12, 32)
+
+[node name="Laser" type="Node2D"]
+script = ExtResource("1_iouqp")
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.25)
+texture = ExtResource("1_gn61s")
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 0
+monitorable = false
+script = ExtResource("2_ygoip")
+attack_resource = SubResource("Resource_5aqxk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+shape = SubResource("RectangleShape2D_5q8vg")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(0.6, 1.6)
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("5_oqsdi")
+initial_state = NodePath("StateCharacterMove")
+
+[node name="StateCharacterMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("character")]
+script = ExtResource("6_uduxy")
+default_direction = Vector2(0, -1)
+character = NodePath("../..")
+move_speed = 500.0

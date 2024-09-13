@@ -6,12 +6,12 @@ class_name StateCharacterPlayerMove
 
 func enter() -> void:
     if input_component:
-        input_component.input_received.connect(_on_input_received)
+        input_component.vector_input_received.connect(_on_input_received)
 
 
 func exit() -> void:
     if input_component:
-        input_component.input_received.disconnect(_on_input_received)
+        input_component.vector_input_received.disconnect(_on_input_received)
 
 
 func _on_input_received(input_dir: Vector2) -> void:
